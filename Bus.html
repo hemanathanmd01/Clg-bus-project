@@ -50,6 +50,9 @@
         <main class="main-content">
             <!-- Top Navigation Bar -->
             <header class="topbar">
+                <button class="icon-btn menu-toggle" onclick="toggleSidebar()">
+                    <i class='bx bx-menu'></i>
+                </button>
                 <div class="search-bar">
                     <i class='bx bx-search'></i>
                     <input type="text" placeholder="Search by bus number, date...">
@@ -152,8 +155,7 @@
                                     <div class="dot"></div> LIVE
                                 </div>
                                 <div class="camera-overlay">
-                                    <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=2069&auto=format&fit=crop"
-                                        class="camera-bg" alt="Main Entry Camera">
+                                    <img src="1000105212.jpg" class="camera-bg" alt="Main Entry Camera">
                                 </div>
                             </div>
                         </div>
@@ -174,8 +176,7 @@
                                     <div class="dot"></div> LIVE
                                 </div>
                                 <div class="camera-overlay">
-                                    <img src="https://images.unsplash.com/photo-1494522855154-9297ac14b55f?q=80&w=2070&auto=format&fit=crop"
-                                        class="camera-bg" alt="Exit Gate Camera">
+                                    <img src="1000105216.jpg" class="camera-bg" alt="Exit Gate Camera">
                                 </div>
                             </div>
                         </div>
@@ -196,8 +197,7 @@
                                     <div class="dot"></div> LIVE
                                 </div>
                                 <div class="camera-overlay">
-                                    <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?q=80&w=2071&auto=format&fit=crop"
-                                        class="camera-bg" alt="Parking A Camera">
+                                    <img src="1000105220.jpg" class="camera-bg" alt="Parking A Camera">
                                 </div>
                             </div>
                         </div>
@@ -218,15 +218,14 @@
                                     <div class="dot"></div> LIVE
                                 </div>
                                 <div class="camera-overlay">
-                                    <img src="https://images.unsplash.com/photo-1543661845-81676f2f2ac6?q=80&w=1956&auto=format&fit=crop"
-                                        class="camera-bg" alt="Parking B Camera">
+                                    <img src="1000105221.jpg" class="camera-bg" alt="Parking B Camera">
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Latest Detection Result -->
-                    <div class="card" style="height: 100%;">
+                    <div class="card hide-on-mobile" style="height: 100%;">
                         <div class="card-header">
                             <h2 class="card-title"><i class='bx bx-scan'></i> Last Detected</h2>
                         </div>
@@ -525,6 +524,30 @@
                 }
             }
         });
+
+        // --- Sidebar Toggle ---
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+
+            sidebar.classList.toggle('active');
+
+            // Optional: Close sidebar when clicking outside on mobile
+            if (sidebar.classList.contains('active')) {
+                const overlay = document.createElement('div');
+                overlay.classList.add('sidebar-overlay');
+                document.body.appendChild(overlay);
+
+                overlay.addEventListener('click', () => {
+                    sidebar.classList.remove('active');
+                    overlay.remove();
+                });
+            } else {
+                const existingOverlay = document.querySelector('.sidebar-overlay');
+                if (existingOverlay) {
+                    existingOverlay.remove();
+                }
+            }
+        }
     </script>
 </body>
 
