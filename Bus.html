@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campus Bus Terminal Dashboard</title>
+    <link rel="icon" type="image/jpg" href="srmminilogo.jpg">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -53,9 +54,13 @@
                 <button class="icon-btn menu-toggle" onclick="toggleSidebar()">
                     <i class='bx bx-menu'></i>
                 </button>
-                <div class="search-bar">
+                <div class="search-bar" id="searchBar">
+                    <button class="close-search-btn hide-on-desktop" onclick="toggleMobileSearch(false)">
+                        <i class='bx bx-arrow-back'></i>
+                    </button>
                     <i class='bx bx-search'></i>
-                    <input type="text" placeholder="Search by bus number, date...">
+                    <input type="text" id="searchInput" placeholder="Search by driver name or bus no... (Press Enter)"
+                        onkeyup="handleSearch(event)">
                 </div>
 
                 <div class="topbar-right">
@@ -64,6 +69,11 @@
                         <i class='bx bx-time'
                             style='color: var(--primary); font-size: 1.2rem; margin-right: 0.5rem;'></i> Loading...
                     </div>
+
+                    <button class="icon-btn mobile-search-toggle hide-on-desktop" onclick="toggleMobileSearch(true)"
+                        title="Search">
+                        <i class='bx bx-search'></i>
+                    </button>
 
                     <button class="icon-btn theme-toggle" title="Toggle Dark Theme" onclick="toggleTheme()">
                         <i class='bx bx-moon'></i>
@@ -74,10 +84,10 @@
                     </button>
 
                     <div class="user-profile">
-                        <img src="https://ui-avatars.com/api/?name=Admin+User&background=2563eb&color=fff" alt="Admin">
+                        <img src="https://ui-avatars.com/api/?name=Head+Admin&background=2563eb&color=fff" alt="Admin">
                         <div class="profile-info">
-                            <h4>Admin User</h4>
-                            <p>Campus Security</p>
+                            <h4>Head Admin</h4>
+                            <p>System Administrator</p>
                         </div>
                         <i class='bx bx-chevron-down'></i>
                     </div>
@@ -155,7 +165,8 @@
                                     <div class="dot"></div> LIVE
                                 </div>
                                 <div class="camera-overlay">
-                                    <img src="1000105212.jpg" class="camera-bg" alt="Main Entry Camera">
+                                    <video src="cam1.mp4" class="camera-bg" autoplay loop muted playsinline
+                                        style="width: 100%; height: 100%; object-fit: cover;"></video>
                                 </div>
                             </div>
                         </div>
@@ -176,7 +187,8 @@
                                     <div class="dot"></div> LIVE
                                 </div>
                                 <div class="camera-overlay">
-                                    <img src="1000105216.jpg" class="camera-bg" alt="Exit Gate Camera">
+                                    <video src="cam2.mp4" class="camera-bg" autoplay loop muted playsinline
+                                        style="width: 100%; height: 100%; object-fit: cover;"></video>
                                 </div>
                             </div>
                         </div>
@@ -197,7 +209,8 @@
                                     <div class="dot"></div> LIVE
                                 </div>
                                 <div class="camera-overlay">
-                                    <img src="1000105220.jpg" class="camera-bg" alt="Parking A Camera">
+                                    <video src="cam3.mp4" class="camera-bg" autoplay loop muted playsinline
+                                        style="width: 100%; height: 100%; object-fit: cover;"></video>
                                 </div>
                             </div>
                         </div>
@@ -218,7 +231,8 @@
                                     <div class="dot"></div> LIVE
                                 </div>
                                 <div class="camera-overlay">
-                                    <img src="1000105221.jpg" class="camera-bg" alt="Parking B Camera">
+                                    <video src="cam4.mp4" class="camera-bg" autoplay loop muted playsinline
+                                        style="width: 100%; height: 100%; object-fit: cover;"></video>
                                 </div>
                             </div>
                         </div>
@@ -546,6 +560,58 @@
                 if (existingOverlay) {
                     existingOverlay.remove();
                 }
+            }
+        }
+    </script>
+
+    <!-- Script for Search Functionality -->
+    <script>
+        // Mock Data for Drivers (used for searching and validating if a driver exists before opening the tab)
+        const driversData = [
+            { name: "lenin", allottedBus: "40" },
+            { name: "Nethin", allottedBus: "36" },
+            { name: "Hari harasuthan", allottedBus: "74" },
+            { name: "Pam Beesly", allottedBus: "12" },
+            { name: "tony", allottedBus: "22" },
+            { name: "Ijaz", allottedBus: "77" }
+        ];
+
+        const searchInput = document.getElementById('searchInput');
+
+        function handleSearch(event) {
+            if (event && event.key !== 'Enter') {
+                return;
+            }
+
+            const query = searchInput.value.toLowerCase().trim();
+
+            if (query.length === 0) {
+                return;
+            }
+
+            // Find driver by name OR bus number
+            const foundDriver = driversData.find(d =>
+                d.name.toLowerCase().includes(query) ||
+                d.allottedBus === query
+            );
+
+            if (foundDriver) {
+                // Open driver details in a new tab using the driver name to ensure consistency
+                window.open(`driver-details.html?driver=${encodeURIComponent(foundDriver.name)}`, '_blank');
+                searchInput.value = ''; // Clear input
+                toggleMobileSearch(false); // Close mobile search overlay if active
+            } else {
+                alert(`No driver or bus found matching "${query}"`);
+            }
+        }
+
+        function toggleMobileSearch(show) {
+            const searchBar = document.getElementById('searchBar');
+            if (show) {
+                searchBar.classList.add('active');
+                document.getElementById('searchInput').focus();
+            } else {
+                searchBar.classList.remove('active');
             }
         }
     </script>
