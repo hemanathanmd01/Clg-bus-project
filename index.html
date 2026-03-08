@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Campus Bus Terminal</title>
+    <link rel="icon" type="image/jpg" href="srmminilogo.jpg">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -145,9 +146,9 @@
 
         <form id="loginForm" onsubmit="handleLogin(event)">
             <div class="form-group">
-                <label for="username">Username / Admin ID</label>
+                <label for="username">User ID (admin / transport)</label>
                 <i class='bx bx-user'></i>
-                <input type="text" id="username" placeholder="admin" required>
+                <input type="text" id="username" placeholder="admin or transport" required>
             </div>
 
             <div class="form-group">
@@ -158,7 +159,7 @@
 
             <button type="submit" class="login-btn">Sign In to Dashboard</button>
             <div class="error-message" id="errorMsg">
-                <i class='bx bx-error-circle'></i> Invalid credentials. Please use 'admin' / 'admin'.
+                <i class='bx bx-error-circle'></i> Invalid credentials.
             </div>
         </form>
     </div>
@@ -166,12 +167,20 @@
     <script>
         function handleLogin(e) {
             e.preventDefault();
-            const user = document.getElementById('username').value;
+            const user = document.getElementById('username').value.toLowerCase().trim();
             const pass = document.getElementById('password').value;
             const errorMsg = document.getElementById('errorMsg');
 
-            // Simple demo authentication
+            // Simple demo authentication for two roles
+            let role = null;
             if (user === 'admin' && pass === 'admin') {
+                role = 'head';
+            } else if (user === 'transport' && pass === 'transport') {
+                role = 'office';
+            }
+
+            if (role) {
+                localStorage.setItem('userRole', role);
                 errorMsg.style.display = 'none';
 
                 // Add a small loading effect
@@ -179,9 +188,13 @@
                 btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Authenticating...";
                 btn.style.opacity = '0.8';
 
-                // Redirect to dashboard after 1 second
+                // Redirect based on role
                 setTimeout(() => {
-                    window.location.href = 'Bus.html';
+                    if (role === 'head') {
+                        window.location.href = 'Bus.html';
+                    } else if (role === 'office') {
+                        window.location.href = 'TransportOffice.html';
+                    }
                 }, 1000);
             } else {
                 errorMsg.style.display = 'block';
@@ -214,5 +227,7 @@
                 transform: translateX(0);
             }
         }
+    </style>
+</body>
 
-        </script></body></html>
+</html>
